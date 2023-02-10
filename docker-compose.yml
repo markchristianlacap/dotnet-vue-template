@@ -1,0 +1,46 @@
+services:
+  erp:
+    build: .
+    restart: unless-stopped
+    container_name: erp
+    depends_on:
+      - mssql
+    networks:
+      - web
+    volumes:
+      - storage:/storage
+    ports:
+      - 8000:80
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    restart: unless-stopped
+    container_name: mssql
+    volumes:
+      - mssql:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=P@ssW0rd
+      - MSSQL_PID=Express
+    networks:
+      - web
+    ports:
+      - 1433:1433
+  seq:
+    image: datalust/seq
+    restart: unless-stopped
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINUSERNAME=admin.admin
+      - SEQ_FIRSTRUN_ADMINPASSWORDHASH=FLLXbx42vw7mf15sYTq+ZyRi7wKYV7qAMINYbDTNvaYuqEJgsA==
+    networks:
+      - web
+    volumes:
+      - seq_data:/data
+volumes:
+  mssql:
+  storage:
+  seq_data:
+networks:
+  web:
+    external: true

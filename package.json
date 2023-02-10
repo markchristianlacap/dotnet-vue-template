@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --workspace src/Client",
+    "watch": "dotnet watch --project src/Application --no-hot-reload",
+    "build": "dotnet publish -o ./publish && npm run build --workspace src/Client && cp -r src/Client/dist ./publish/"
+  },
+  "author": "markchristianlacap@gmail.com",
+  "license": "MIT",
+  "workspaces": [
+    "src/Client"
+  ]
+}
